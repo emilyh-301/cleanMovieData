@@ -4,34 +4,46 @@
 import csv
 
 def clean_data():
-    DataFile = "path to my file"
-    DataCaptured = csv.reader(DataFile, delimiter=',', skipinitialspace=True)
+    DataFile = "data/exampleMovies.csv"
 
-    Genres = set()
-    for row in DataCaptured:
-        if row[6] not in Genres:
-            Genres.add(row[6])
+    with open(DataFile, "r") as csvfile:
+        DataCaptured = csv.DictReader(csvfile) # delimiter=',', skipinitialspace=True)
+        Genres = set()
+        for row in DataCaptured:
+            lst = row["Genres"].split(",", 1)
+            for g in lst:
+                if g not in Genres:
+                    Genres.add(g)
 
-    print(Genres)
+        print(Genres)
+        print(len(Genres))
 
 def output_new_file():
-    new_file = ""
-    old_file = ""
-    old_data = csv.reader(old_file, delimiter=',', skipinitialspace=True)
-    new_data = csv.writer(new_file, ',')
+    new_file = "data/newMoviesFile.csv"
+    old_file = "data/exampleMovies.csv"
 
-    #we need the number of cols for the genres
+    with open(old_file, "r") as oldcsvfile: #, new_file:
+        reader = csv.DictReader(oldcsvfile)
+        filename = ['Title', 'Director', 'Rating', 'Time', 'Tomatoes', 'Rom', 'Com', 'Western', 'Action', 'Adv']
+        writer = csv.DictWriter(new_file, fieldnames=)
+        writer.writeheader()
 
-    for row in new_data:
-        genres = list(old_data[row][6])
-        for g in genres:
-            new_data[row][get_col(g)] = '1'
+        for row in reader:
+            print(row)
+            writer.writerow({
+                "Title": row["Title"],
+                "Director": row["Director"],
+                "Rating": row["Rating"],
+                "Time": row["Time"],
+                "Tomatoes": row["Tomatoes"],
+                #if row["Genres"].split(",").contains("rom"):
+                #    "Rom": "1",
+            })
+
 
 def get_col(genre):
     return 1
 
 if __name__ == '__main__':
-    clean_data()
-
-
+    output_new_file()
 
