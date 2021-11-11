@@ -39,12 +39,15 @@ def output_new_file():
         writer.writeheader()
 
         for row in reader:
+            desc = row['description'].split(' ')
+            if len(desc) < 11:
+                continue
+
             lst = set()
             lstgenres = row["genre"].split(",")
             for g in lstgenres:
                 if g.strip not in lst:
                     lst.add(g.strip())
-            print(lst)
             rom = 0
             com = 0
             western = 0
@@ -62,7 +65,6 @@ def output_new_file():
             history = 0
             horror = 0
             music = 0
-            musical = 0
             mystery = 0
             realitytv = 0
             news = 0
@@ -87,7 +89,7 @@ def output_new_file():
             if "History" in lst: history = 1
             if "Horror" in lst: horror = 1
             if "Music" in lst: music = 1
-            if "Musical" in lst: musical = 1
+            if "Musical" in lst: music = 1
             if "Mystery" in lst: mystery = 1
             if "Reality-TV" in lst: realitytv = 1
             if "News" in lst: news = 1
@@ -95,6 +97,9 @@ def output_new_file():
             if "Sport" in lst: sport = 1
             if "War" in lst: war = 1
             if "Thriller" in lst: thriller = 1
+
+            if realitytv == 1 or news == 1:
+                continue
 
             writer.writerow({
                 "imdb_title_id": row["imdb_title_id"],
@@ -116,10 +121,7 @@ def output_new_file():
                 'History': history,
                 'Horror': horror,
                 'Music': music,
-                'Musical': musical,
                 'Mystery': mystery,
-                'News': news,
-                'Reality-TV': realitytv,
                 "Romance": rom,
                 'Sci-Fi': scifi,
                 'Sport': sport,
